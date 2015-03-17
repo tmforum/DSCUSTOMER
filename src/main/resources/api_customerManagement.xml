@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<api xmlns="http://orange.com/soa/schemas/oadl/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="customer" projectName="tmf" majorVersion="2" minorVersion="0" namespace="http://orange.com/api/customer/tmf/v2" status="DRAFT" type="PROJECT" xsi:schemaLocation="http://orange.com/soa/schemas/oadl/v1 oadl.xsd">
+    <model location="model_business.xsd" namespace="http://orange.com/api/customer/tmf/v2/model/business"/>
+    <resource class="Customer">
+        <actions>
+            <create/>
+            <delete/>
+            <find/>
+            <get/>
+            <update/>
+        </actions>
+    </resource>
+    <resource class="CustomerAccount">
+        <actions>
+            <create/>
+            <delete/>
+            <find/>
+            <get/>
+            <update/>
+        </actions>
+    </resource>
+    <resource class="PaymentMean">
+        <actions>
+            <create/>
+            <delete/>
+            <find/>
+            <get/>
+            <update/>
+        </actions>
+    </resource>
+</api>
