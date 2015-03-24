@@ -14,15 +14,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  */
 public class CustomDateAdapter extends XmlAdapter<String, Date> {
 
-//    @Override
-//    public String marshal(Date v) throws Exception {
-//        return JaxbDateConverter.printDate(v);
-//    }
-//
-//    @Override
-//    public Date unmarshal(String v) throws Exception {
-//        return JaxbDateConverter.parseDate(v);
-//    }
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override

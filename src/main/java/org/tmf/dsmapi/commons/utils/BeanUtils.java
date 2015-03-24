@@ -75,12 +75,19 @@ public class BeanUtils {
 //            }
 //        }
 //    }    
-    public static void patch(Object bean, Object patch, JsonNode node) {
+    /**
+     *
+     * @param bean
+     * @param patchBean
+     * @param node
+     */
+    public static boolean patch(Object bean, Object patch, JsonNode node) {
         String name;
         JsonNode child;
         Object value;
         Object patchValue;
         Iterator<String> it = node.getFieldNames();
+        boolean isModified=false;
         while (it.hasNext()) {
             name = it.next();
             patchValue = BeanUtils.getNestedProperty(patch, name);
@@ -91,14 +98,17 @@ public class BeanUtils {
                         value = BeanUtils.getNestedProperty(bean, name);
                         patch(value, patchValue, child);
                         BeanUtils.setNestedProperty(bean, name, patchValue);
+                        isModified=true;
                     }
                 } else {
                     value = BeanUtils.getNestedProperty(bean, name);
                     patch(value, patchValue, child);
                     BeanUtils.setNestedProperty(bean, name, patchValue);
+                    isModified=true;
                 }
             }
         }
+        return isModified;
     }
 
     public static boolean verify(Object patch, JsonNode node, String attribut) {

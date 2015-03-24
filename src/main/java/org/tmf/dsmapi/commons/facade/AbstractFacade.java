@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,7 +21,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.core.MultivaluedMap;
 import org.tmf.dsmapi.commons.exceptions.BadUsageException;
 import org.tmf.dsmapi.commons.exceptions.ExceptionType;
 import org.tmf.dsmapi.commons.exceptions.UnknownResourceException;
@@ -56,6 +57,7 @@ public abstract class AbstractFacade<T> {
      * @return
      * @throws BadUsageException
      */
+     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public int create(List<T> entities) throws BadUsageException {
         for (T entity : entities) {
             this.create(entity);
@@ -68,6 +70,7 @@ public abstract class AbstractFacade<T> {
      * @param entity
      * @throws BadUsageException
      */
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void create(T entity) throws BadUsageException {
         getEntityManager().persist(entity);
     }
@@ -78,6 +81,7 @@ public abstract class AbstractFacade<T> {
      * @return
      * @throws UnknownResourceException
      */
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)    
     public T edit(T entity) throws UnknownResourceException {
         getEntityManager().merge(entity);
         return entity;
@@ -88,11 +92,13 @@ public abstract class AbstractFacade<T> {
      * @param id
      * @throws UnknownResourceException
      */
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)    
     public void remove(Object id) throws UnknownResourceException {
         T entity = getEntityManager().find(entityClass, id);
         getEntityManager().remove(getEntityManager().merge(entity));
     }
-
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void removeAll() {
         List<T> all = findAll();
         EntityManager em = getEntityManager();
