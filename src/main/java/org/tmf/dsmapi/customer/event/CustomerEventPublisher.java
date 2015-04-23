@@ -58,7 +58,7 @@ public class CustomerEventPublisher implements CustomerEventPublisherLocal {
         CustomerEvent event = new CustomerEvent();
         event.setEventTime(date);
         event.setEventType(CustomerEventTypeEnum.CustomerCreationNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
 
     }
@@ -68,7 +68,7 @@ public class CustomerEventPublisher implements CustomerEventPublisherLocal {
         CustomerEvent event = new CustomerEvent();
         event.setEventTime(date);
         event.setEventType(CustomerEventTypeEnum.CustomerDeletionNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 	
@@ -77,7 +77,7 @@ public class CustomerEventPublisher implements CustomerEventPublisherLocal {
         CustomerEvent event = new CustomerEvent();
         event.setEventTime(date);
         event.setEventType(CustomerEventTypeEnum.CustomerUpdateNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 
@@ -86,7 +86,7 @@ public class CustomerEventPublisher implements CustomerEventPublisherLocal {
         CustomerEvent event = new CustomerEvent();
         event.setEventTime(date);
         event.setEventType(CustomerEventTypeEnum.CustomerValueChangeNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 }

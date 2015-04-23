@@ -151,7 +151,7 @@ public class CustomerAccountAdminResource {
             // remove event(s) binding to the resource
             List<CustomerAccountEvent> events = eventFacade.findAll();
             for (CustomerAccountEvent event : events) {
-                if (event.getEvent().getId().equals(id)) {
+                if (event.getResource().getId().equals(id)) {
                     eventFacade.remove(event.getId());
                 }
             }
@@ -203,7 +203,7 @@ public class CustomerAccountAdminResource {
         int previousRows = eventFacade.count();
         List<CustomerAccountEvent> events = eventFacade.findAll();
         for (CustomerAccountEvent event : events) {
-            if (event.getEvent().getId().equals(id)) {
+            if (event.getResource().getId().equals(id)) {
                 eventFacade.remove(event.getId());
 
             }

@@ -41,7 +41,7 @@ import org.tmf.dsmapi.customerAccount.event.CustomerAccountEvent;
 import org.tmf.dsmapi.customerAccount.event.CustomerAccountEventFacade;
 
 @Stateless
-@Path("/customerManagement/v2/customerAccount")
+@Path("customerAccount")
 public class CustomerAccountResource {
 
     @EJB
@@ -194,7 +194,7 @@ public class CustomerAccountResource {
             // remove event(s) binding to the resource
             List<CustomerAccountEvent> events = eventFacade.findAll();
             for (CustomerAccountEvent event : events) {
-                if (event.getEvent().getId().equals(id)) {
+                if (event.getResource().getId().equals(id)) {
                     eventFacade.remove(event.getId());
                 }
             }

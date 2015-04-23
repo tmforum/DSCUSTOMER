@@ -151,7 +151,7 @@ public class PaymentMeanAdminResource {
             // remove event(s) binding to the resource
             List<PaymentMeanEvent> events = eventFacade.findAll();
             for (PaymentMeanEvent event : events) {
-                if (event.getEvent().getId().equals(id)) {
+                if (event.getResource().getId().equals(id)) {
                     eventFacade.remove(event.getId());
                 }
             }
@@ -203,7 +203,7 @@ public class PaymentMeanAdminResource {
         int previousRows = eventFacade.count();
         List<PaymentMeanEvent> events = eventFacade.findAll();
         for (PaymentMeanEvent event : events) {
-            if (event.getEvent().getId().equals(id)) {
+            if (event.getResource().getId().equals(id)) {
                 eventFacade.remove(event.getId());
 
             }

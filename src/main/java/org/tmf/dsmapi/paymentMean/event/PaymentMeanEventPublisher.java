@@ -58,7 +58,7 @@ public class PaymentMeanEventPublisher implements PaymentMeanEventPublisherLocal
         PaymentMeanEvent event = new PaymentMeanEvent();
         event.setEventTime(date);
         event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanCreationNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
 
     }
@@ -68,7 +68,7 @@ public class PaymentMeanEventPublisher implements PaymentMeanEventPublisherLocal
         PaymentMeanEvent event = new PaymentMeanEvent();
         event.setEventTime(date);
         event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanDeletionNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 	
@@ -77,7 +77,7 @@ public class PaymentMeanEventPublisher implements PaymentMeanEventPublisherLocal
         PaymentMeanEvent event = new PaymentMeanEvent();
         event.setEventTime(date);
         event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanUpdateNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 
@@ -86,7 +86,7 @@ public class PaymentMeanEventPublisher implements PaymentMeanEventPublisherLocal
         PaymentMeanEvent event = new PaymentMeanEvent();
         event.setEventTime(date);
         event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanValueChangeNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 }

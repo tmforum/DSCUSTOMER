@@ -41,7 +41,7 @@ import org.tmf.dsmapi.paymentMean.event.PaymentMeanEvent;
 import org.tmf.dsmapi.paymentMean.event.PaymentMeanEventFacade;
 
 @Stateless
-@Path("/customerManagement/v2/paymentMean")
+@Path("paymentMean")
 public class PaymentMeanResource {
 
     @EJB
@@ -194,7 +194,7 @@ public class PaymentMeanResource {
             // remove event(s) binding to the resource
             List<PaymentMeanEvent> events = eventFacade.findAll();
             for (PaymentMeanEvent event : events) {
-                if (event.getEvent().getId().equals(id)) {
+                if (event.getResource().getId().equals(id)) {
                     eventFacade.remove(event.getId());
                 }
             }

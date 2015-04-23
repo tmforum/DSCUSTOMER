@@ -58,7 +58,7 @@ public class CustomerAccountEventPublisher implements CustomerAccountEventPublis
         CustomerAccountEvent event = new CustomerAccountEvent();
         event.setEventTime(date);
         event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountCreationNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
 
     }
@@ -68,7 +68,7 @@ public class CustomerAccountEventPublisher implements CustomerAccountEventPublis
         CustomerAccountEvent event = new CustomerAccountEvent();
         event.setEventTime(date);
         event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountDeletionNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 	
@@ -77,7 +77,7 @@ public class CustomerAccountEventPublisher implements CustomerAccountEventPublis
         CustomerAccountEvent event = new CustomerAccountEvent();
         event.setEventTime(date);
         event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountUpdateNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 
@@ -86,7 +86,7 @@ public class CustomerAccountEventPublisher implements CustomerAccountEventPublis
         CustomerAccountEvent event = new CustomerAccountEvent();
         event.setEventTime(date);
         event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountValueChangeNotification);
-        event.setEvent(bean);
+        event.setResource(bean);
         publish(event);
     }
 }

@@ -36,7 +36,7 @@ import org.tmf.dsmapi.customer.event.CustomerEvent;
 import org.tmf.dsmapi.customer.event.CustomerEventFacade;
 
 @Stateless
-@Path("/customerManagement/v2/customer")
+@Path("customer")
 public class CustomerResource {
 
     @EJB
@@ -189,7 +189,7 @@ public class CustomerResource {
             // remove event(s) binding to the resource
             List<CustomerEvent> events = eventFacade.findAll();
             for (CustomerEvent event : events) {
-                if (event.getEvent().getId().equals(id)) {
+                if (event.getResource().getId().equals(id)) {
                     eventFacade.remove(event.getId());
                 }
             }

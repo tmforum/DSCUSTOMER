@@ -16,9 +16,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
+import org.tmf.dsmapi.customer.model.CustomerAccount;
 import org.tmf.dsmapi.customer.model.PaymentMean;
 
 @XmlRootElement
@@ -30,8 +35,9 @@ public class PaymentMeanEvent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @JsonIgnore
+ @JsonProperty("eventId")
     private String id;
+
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonSerialize(using = CustomJsonDateSerializer.class)
@@ -40,7 +46,7 @@ public class PaymentMeanEvent implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private PaymentMeanEventTypeEnum eventType;
 
-    private PaymentMean event; //check for object
+    private PaymentMean resource; //check for object
 
     public String getId() {
         return id;
@@ -49,6 +55,26 @@ public class PaymentMeanEvent implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+    
+    @JsonAutoDetect(fieldVisibility = ANY)
+    class EventBody {
+        private PaymentMean paymentMean;
+        public PaymentMean getPayMean() {
+            return paymentMean;
+        }
+        public EventBody(PaymentMean paymentMean) { 
+        this.paymentMean = paymentMean;
+    }
+    
+       
+    }
+   @JsonProperty("event")
+   public EventBody getEvent() {
+       
+       return new EventBody(getResource() );
+   }
+    
+
 
     public Date getEventTime() {
         return eventTime;
@@ -66,17 +92,22 @@ public class PaymentMeanEvent implements Serializable {
         this.eventType = eventType;
     }
 
-    public PaymentMean getEvent() {
-        return event;
+   @JsonIgnore
+    public PaymentMean getResource() {
+        
+        
+        return resource;
     }
 
-    public void setEvent(PaymentMean event) {
-        this.event = event;
+    public void setResource(PaymentMean resource) {
+        this.resource = resource;
     }
 
     @Override
     public String toString() {
-        return "PaymentMeanEvent{" + "id=" + id + ", eventTime=" + eventTime + ", eventType=" + eventType + ", event=" + event + '}';
+        return "PaymentMeanEvent{" + "id=" + id + ", eventTime=" + eventTime + ", eventType=" + eventType + ", resource=" + resource + '}';
     }
+
+   
 
 }

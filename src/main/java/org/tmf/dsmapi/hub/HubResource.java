@@ -16,7 +16,7 @@ import org.tmf.dsmapi.commons.exceptions.UnknownResourceException;
 import org.tmf.dsmapi.commons.jaxrs.Report;
 
 @Stateless
-@Path("/customer/v2/hub")
+@Path("hub")
 public class HubResource {
 
     @EJB

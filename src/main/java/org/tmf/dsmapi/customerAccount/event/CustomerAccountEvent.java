@@ -16,6 +16,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
@@ -30,7 +34,7 @@ public class CustomerAccountEvent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @JsonIgnore
+@JsonProperty("eventId")
     private String id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,7 +44,7 @@ public class CustomerAccountEvent implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private CustomerAccountEventTypeEnum eventType;
 
-    private CustomerAccount event; //check for object
+    private CustomerAccount resource; //check for object
 
     public String getId() {
         return id;
@@ -66,17 +70,41 @@ public class CustomerAccountEvent implements Serializable {
         this.eventType = eventType;
     }
 
-    public CustomerAccount getEvent() {
-        return event;
+    
+@JsonAutoDetect(fieldVisibility = ANY)
+    class EventBody {
+        private CustomerAccount customerAccount;
+        public CustomerAccount getCustomerAccount() {
+            return customerAccount;
+        }
+        public EventBody(CustomerAccount customerAccount) { 
+        this.customerAccount = customerAccount;
+    }
+    
+       
+    }
+   @JsonProperty("event")
+   public EventBody getEvent() {
+       
+       return new EventBody(getResource() );
+   }
+
+    @JsonIgnore
+    public CustomerAccount getResource() {
+        
+        
+        return resource;
     }
 
-    public void setEvent(CustomerAccount event) {
-        this.event = event;
+    public void setResource(CustomerAccount resource) {
+        this.resource = resource;
     }
 
     @Override
     public String toString() {
-        return "CustomerAccountEvent{" + "id=" + id + ", eventTime=" + eventTime + ", eventType=" + eventType + ", event=" + event + '}';
+        return "CustomerAccountEvent{" + "id=" + id + ", eventTime=" + eventTime + ", eventType=" + eventType + ", resource=" + resource + '}';
     }
 
+
+    
 }

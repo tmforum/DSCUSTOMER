@@ -16,6 +16,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
@@ -30,25 +34,13 @@ public class CustomerEvent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @JsonIgnore
+   @JsonProperty("eventId")
     private String id;
+    
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonSerialize(using = CustomJsonDateSerializer.class)
     private Date eventTime;
-
-    @Enumerated(value = EnumType.STRING)
-    private CustomerEventTypeEnum eventType;
-
-    private Customer event; //check for object
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Date getEventTime() {
         return eventTime;
@@ -58,6 +50,31 @@ public class CustomerEvent implements Serializable {
         this.eventTime = eventTime;
     }
 
+    @Enumerated(value = EnumType.STRING)
+    private CustomerEventTypeEnum eventType;
+
+    private Customer resource; //check for object
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @JsonIgnore
+    public Customer getResource() {
+        
+        
+        return resource;
+    }
+
+    public void setResource(Customer resource) {
+        this.resource = resource;
+    }
+
+
     public CustomerEventTypeEnum getEventType() {
         return eventType;
     }
@@ -66,17 +83,30 @@ public class CustomerEvent implements Serializable {
         this.eventType = eventType;
     }
 
-    public Customer getEvent() {
-        return event;
+     @JsonAutoDetect(fieldVisibility = ANY)
+    class EventBody {
+        private Customer customer;
+        public Customer getTroubleTicket() {
+            return customer;
+        }
+        public EventBody(Customer customer) { 
+        this.customer = customer;
     }
-
-    public void setEvent(Customer event) {
-        this.event = event;
+    
+       
     }
+   @JsonProperty("event")
+   public EventBody getEvent() {
+       
+       return new EventBody(getResource() );
+   }
 
     @Override
     public String toString() {
-        return "CustomerEvent{" + "id=" + id + ", eventTime=" + eventTime + ", eventType=" + eventType + ", event=" + event + '}';
+        return "CustomerEvent{" + "id=" + id + ", eventTime=" + eventTime + ", eventType=" + eventType + ", resource=" + resource + '}';
     }
+    
+
+    
 
 }
