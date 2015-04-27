@@ -69,7 +69,7 @@ public class ContactMedium
     protected String type;
     protected ValidFor validFor;
     protected Medium medium;
-    protected String preferred;
+    protected Boolean preferred;
     @XmlAttribute(name = "Hjid")
     protected Long hjid;
 
@@ -165,7 +165,7 @@ public class ContactMedium
      */
     @Basic
     @Column(name = "PREFERRED", length = 255)
-    public String getPreferred() {
+    public Boolean getPreferred() {
         return preferred;
     }
 
@@ -177,7 +177,7 @@ public class ContactMedium
      *     {@link String }
      *     
      */
-    public void setPreferred(String value) {
+    public void setPreferred(Boolean value) {
         this.preferred = value;
     }
 

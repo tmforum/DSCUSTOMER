@@ -26,7 +26,7 @@ public interface PaymentMeanEventPublisherLocal {
      * @param reason the reason of the deletion
      * @param date the deletion date
      */
-    public void deletionNotification(PaymentMean bean, Date date);
+    public void deleteNotification(PaymentMean bean, Date date);
 
     /**
      *
@@ -37,12 +37,4 @@ public interface PaymentMeanEventPublisherLocal {
      */
     public void updateNotification(PaymentMean bean, Date date);
 
-    /**
-     *
-     * ValueChangeNotification
-     * @param bean the bean which has been changed
-     * @param reason the reason it was changed
-     * @param date the change date
-     */
-    public void valueChangedNotification(PaymentMean bean, Date date);
 }

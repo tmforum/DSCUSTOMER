@@ -1,6 +1,8 @@
 package org.tmf.dsmapi.customer;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,14 @@ import org.tmf.dsmapi.customer.model.Customer;
 import org.tmf.dsmapi.customer.event.CustomerEvent;
 import org.tmf.dsmapi.customer.event.CustomerEventFacade;
 import org.tmf.dsmapi.customer.event.CustomerEventPublisherLocal;
+import org.tmf.dsmapi.customer.model.Characteristic;
+import org.tmf.dsmapi.customer.model.ContactMedium;
+import org.tmf.dsmapi.customer.model.CustomerAccount;
+import org.tmf.dsmapi.customer.model.CustomerCreditProfile;
+import org.tmf.dsmapi.customer.model.Medium;
+import org.tmf.dsmapi.customer.model.PaymentMean;
+import org.tmf.dsmapi.customer.model.RelatedParty;
+import org.tmf.dsmapi.customer.model.ValidFor;
 
 @Stateless
 @Path("/admin/customer")
@@ -43,6 +53,7 @@ public class CustomerAdminResource {
     /**
      *
      * For test purpose only
+     *
      * @param entities
      * @return
      */
@@ -88,7 +99,7 @@ public class CustomerAdminResource {
         if (customer != null) {
             entity.setId(id);
             customerFacade.edit(entity);
-            publisher.valueChangedNotification(entity, new Date());
+            publisher.updateNotification(entity, new Date());
             // 201 OK + location
             response = Response.status(Response.Status.CREATED).entity(entity).build();
 
@@ -102,6 +113,7 @@ public class CustomerAdminResource {
     /**
      *
      * For test purpose only
+     *
      * @return
      * @throws org.tmf.dsmapi.commons.exceptions.UnknownResourceException
      */
@@ -129,6 +141,7 @@ public class CustomerAdminResource {
     /**
      *
      * For test purpose only
+     *
      * @param id
      * @return
      * @throws UnknownResourceException
@@ -141,7 +154,7 @@ public class CustomerAdminResource {
             Customer entity = customerFacade.find(id);
 
             // Event deletion
-            publisher.deletionNotification(entity, new Date());
+            publisher.deleteNotification(entity, new Date());
             try {
                 //Pause for 4 seconds to finish notification
                 Thread.sleep(4000);
@@ -229,5 +242,145 @@ public class CustomerAdminResource {
     @Produces({"application/json"})
     public Report count() {
         return new Report(customerFacade.count());
+    }
+
+    @GET
+    @Produces({"application/json"})
+    @Path("proto")
+    public Customer proto() {
+        Customer customer = new Customer();
+
+        customer.setId(new Long(123));
+        customer.setHref("href/123");
+        customer.setName("DisplayName");
+        customer.setStatus("New");
+        customer.setDescription("customer description");
+        customer.setCustomerRank("3");
+
+        ValidFor validFor = new ValidFor();
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.set(2014, 05, 15);
+        validFor.setStartDateTime(gc.getTime());
+        customer.setValidFor(validFor);
+
+        RelatedParty relatedParty = new RelatedParty();
+        relatedParty.setId("1");
+        relatedParty.setHref("http://serverlocation:port/partyManagement/individual/1");
+        relatedParty.setRole("customer");
+        relatedParty.setName("John Doe");
+        customer.setRelatedParty(relatedParty);
+
+        List<Characteristic> characteristics = new ArrayList<Characteristic>();
+        Characteristic charac1 = new Characteristic();
+        charac1.setName("Characteristic name 1");
+        charac1.setValue("Characteristic value 1");
+        Characteristic charac2 = new Characteristic();
+        charac2.setName("Characteristic name 2");
+        charac2.setValue("Characteristic value 2");
+        characteristics.add(charac1);
+        characteristics.add(charac2);
+        customer.setCharacteristic(characteristics);
+
+        List<ContactMedium> contactMediums = new ArrayList<ContactMedium>();
+        ContactMedium cm = new ContactMedium();
+        Medium medium = new Medium();
+        cm.setType("Email");
+        medium.setEmailAddress("abc@tmforum.com");
+        cm.setMedium(medium);
+        gc.set(2015, 01, 01);
+        validFor.setStartDateTime(gc.getTime());
+        validFor.setEndDateTime(null);
+        cm.setValidFor(validFor);
+        contactMediums.add(cm);
+
+        cm = new ContactMedium();
+        medium = new Medium();
+        cm.setType("TelephoneNumber");
+        medium.setNumber("+436641234567");
+        medium.setType("business");
+        cm.setMedium(medium);
+        validFor.setStartDateTime(gc.getTime());
+        validFor.setEndDateTime(null);
+        cm.setValidFor(validFor);
+        cm.setPreferred(true);
+        contactMediums.add(cm);
+
+        cm = new ContactMedium();
+        medium = new Medium();
+        cm.setType("PostalAddress");
+        medium.setCity("Wien");
+        medium.setCountry("Austria");
+        medium.setPostcode("1020");
+        medium.setStateOrProvince("Quebec");
+        medium.setStreetOne("Lassallestrasse7");
+        medium.setStreetTwo("");
+        cm.setMedium(medium);
+        gc.set(2015, 01, 01);
+        validFor.setStartDateTime(gc.getTime());
+        validFor.setEndDateTime(null);
+        cm.setValidFor(validFor);
+        contactMediums.add(cm);
+        
+        customer.setContactMedium(contactMediums);
+
+        List<CustomerAccount> customerAccounts = new ArrayList<CustomerAccount>();
+        CustomerAccount ca = new CustomerAccount();
+        ca.setId(new Long(1));
+        ca.setHref("http://serverlocation:port/customerManagement/customerAccount/1");
+        ca.setName("customerAccount1");
+        ca.setDescription("CustomerAccountDesc1");
+        ca.setStatus("Active");
+        customerAccounts.add(ca);
+
+        ca = new CustomerAccount();
+        ca.setId(new Long(2));
+        ca.setHref("http://serverlocation:port/customerManagement/customerAccount/2");
+        ca.setName("customerAccount2");
+        ca.setDescription("CustomerAccountDesc2");
+        ca.setStatus("Active");
+        customerAccounts.add(ca);
+        
+        customer.setCustomerAccount(customerAccounts);
+        
+        
+        List<CustomerCreditProfile> customerCreditProfiles = new ArrayList<CustomerCreditProfile>();
+        CustomerCreditProfile ccp = new CustomerCreditProfile();
+        ccp.setCreditProfileDate(new Date());
+        ccp.setCreditRiskRating("1");
+        ccp.setCreditScore("1");
+        gc.set(2015, 01, 04);
+        validFor.setStartDateTime(gc.getTime());
+        validFor.setEndDateTime(null);
+        ccp.setValidFor(validFor);
+        customerCreditProfiles.add(ccp);
+        
+        ccp = new CustomerCreditProfile();
+        ccp.setCreditProfileDate(new Date());
+        ccp.setCreditRiskRating("2");
+        ccp.setCreditScore("2");
+        gc.set(2015, 01, 04);
+        validFor.setStartDateTime(gc.getTime());
+        validFor.setEndDateTime(null);
+        ccp.setValidFor(validFor);
+        customerCreditProfiles.add(ccp);
+
+        customer.setCustomerCreditProfile(customerCreditProfiles);
+        
+        List<PaymentMean> paymentMeans = new ArrayList<PaymentMean>();
+        PaymentMean pm = new PaymentMean();
+        pm.setId(new Long(45));
+        pm.setHref("http://serverlocation:port/customerManagement/paymentMean/45");
+        pm.setName("my favourite payment mean");
+        paymentMeans.add(pm);
+        
+        pm = new PaymentMean();
+        pm.setId(new Long(64));
+        pm.setHref("http://serverlocation:port/customerManagement/paymentMean/64");
+        pm.setName("my credit card payment mean");
+        paymentMeans.add(pm);
+        
+        customer.setPaymentMean(paymentMeans);
+
+        return customer;
     }
 }

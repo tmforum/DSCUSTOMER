@@ -6,10 +6,9 @@ package org.tmf.dsmapi.customerAccount.event;
 
 public enum CustomerAccountEventTypeEnum {
 
-    CustomerAccountCreationNotification("CustomerAccountCreationNotification"),
+    CustomerAccountCreateNotification("CustomerAccountCreateNotification"),
     CustomerAccountUpdateNotification("CustomerAccountUpdateNotification"),
-    CustomerAccountDeletionNotification("CustomerAccountDeletionNotification"),
-    CustomerAccountValueChangeNotification("CustomerAccountValueChangeNotification");
+    CustomerAccountDeleteNotification("CustomerAccountDeleteNotification");
 
     private String text;
 

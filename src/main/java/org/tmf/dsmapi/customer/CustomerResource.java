@@ -55,8 +55,11 @@ public class CustomerResource {
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
-    public Response create(Customer entity) throws BadUsageException {
+    public Response create(Customer entity) throws BadUsageException, UnknownResourceException {
+        customerFacade.checkCreation(entity);
         customerFacade.create(entity);
+        entity.setHref("href/".concat(Long.toString(entity.getId())));
+        customerFacade.edit(entity);
         publisher.createNotification(entity, new Date());
         // 201
         Response response = Response.status(Response.Status.CREATED).entity(entity).build();
@@ -153,7 +156,7 @@ public class CustomerResource {
         if (customer != null) {
             entity.setId(id);
             customerFacade.edit(entity);
-            publisher.valueChangedNotification(entity, new Date());
+            publisher.updateNotification(entity, new Date());
             // 201 OK + location
             response = Response.status(Response.Status.CREATED).entity(entity).build();
 
@@ -179,7 +182,7 @@ public class CustomerResource {
             Customer entity = customerFacade.find(id);
 
             // Event deletion
-            publisher.deletionNotification(entity, new Date());
+            publisher.deleteNotification(entity, new Date());
             try {
                 //Pause for 4 seconds to finish notification
                 Thread.sleep(4000);

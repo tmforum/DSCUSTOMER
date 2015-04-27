@@ -26,7 +26,7 @@ public interface CustomerEventPublisherLocal {
      * @param reason the reason of the deletion
      * @param date the deletion date
      */
-    public void deletionNotification(Customer bean, Date date);
+    public void deleteNotification(Customer bean, Date date);
 
     /**
      *
@@ -37,12 +37,4 @@ public interface CustomerEventPublisherLocal {
      */
     public void updateNotification(Customer bean, Date date);
 
-    /**
-     *
-     * ValueChangeNotification
-     * @param bean the bean which has been changed
-     * @param reason the reason it was changed
-     * @param date the change date
-     */
-    public void valueChangedNotification(Customer bean, Date date);
 }

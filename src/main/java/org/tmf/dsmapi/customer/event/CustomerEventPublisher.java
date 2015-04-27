@@ -57,17 +57,17 @@ public class CustomerEventPublisher implements CustomerEventPublisherLocal {
     public void createNotification(Customer bean, Date date) {
         CustomerEvent event = new CustomerEvent();
         event.setEventTime(date);
-        event.setEventType(CustomerEventTypeEnum.CustomerCreationNotification);
+        event.setEventType(CustomerEventTypeEnum.CustomerCreateNotification);
         event.setResource(bean);
         publish(event);
 
     }
 
     @Override
-    public void deletionNotification(Customer bean, Date date) {
+    public void deleteNotification(Customer bean, Date date) {
         CustomerEvent event = new CustomerEvent();
         event.setEventTime(date);
-        event.setEventType(CustomerEventTypeEnum.CustomerDeletionNotification);
+        event.setEventType(CustomerEventTypeEnum.CustomerDeleteNotification);
         event.setResource(bean);
         publish(event);
     }
@@ -81,12 +81,4 @@ public class CustomerEventPublisher implements CustomerEventPublisherLocal {
         publish(event);
     }
 
-    @Override
-    public void valueChangedNotification(Customer bean, Date date) {
-        CustomerEvent event = new CustomerEvent();
-        event.setEventTime(date);
-        event.setEventType(CustomerEventTypeEnum.CustomerValueChangeNotification);
-        event.setResource(bean);
-        publish(event);
-    }
 }

@@ -57,17 +57,17 @@ public class PaymentMeanEventPublisher implements PaymentMeanEventPublisherLocal
     public void createNotification(PaymentMean bean, Date date) {
         PaymentMeanEvent event = new PaymentMeanEvent();
         event.setEventTime(date);
-        event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanCreationNotification);
+        event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanCreateNotification);
         event.setResource(bean);
         publish(event);
 
     }
 
     @Override
-    public void deletionNotification(PaymentMean bean, Date date) {
+    public void deleteNotification(PaymentMean bean, Date date) {
         PaymentMeanEvent event = new PaymentMeanEvent();
         event.setEventTime(date);
-        event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanDeletionNotification);
+        event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanDeleteNotification);
         event.setResource(bean);
         publish(event);
     }
@@ -81,12 +81,4 @@ public class PaymentMeanEventPublisher implements PaymentMeanEventPublisherLocal
         publish(event);
     }
 
-    @Override
-    public void valueChangedNotification(PaymentMean bean, Date date) {
-        PaymentMeanEvent event = new PaymentMeanEvent();
-        event.setEventTime(date);
-        event.setEventType(PaymentMeanEventTypeEnum.PaymentMeanValueChangeNotification);
-        event.setResource(bean);
-        publish(event);
-    }
 }

@@ -6,10 +6,9 @@ package org.tmf.dsmapi.paymentMean.event;
 
 public enum PaymentMeanEventTypeEnum {
 
-    PaymentMeanCreationNotification("PaymentMeanCreationNotification"),
+    PaymentMeanCreateNotification("PaymentMeanCreateNotification"),
     PaymentMeanUpdateNotification("PaymentMeanUpdateNotification"),
-    PaymentMeanDeletionNotification("PaymentMeanDeletionNotification"),
-    PaymentMeanValueChangeNotification("PaymentMeanValueChangeNotification");
+    PaymentMeanDeleteNotification("PaymentMeanDeleteNotification");
 
     private String text;
 

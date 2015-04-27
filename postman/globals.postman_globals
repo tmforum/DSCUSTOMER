@@ -1,0 +1,100 @@
+[
+	{
+		"key": "billingManagementApi",
+		"value": "{{Host}}/DSBillingManagement/api/billingManagement/v2",
+		"type": "text",
+		"name": "billingManagementApi",
+		"enabled": true
+	},
+	{
+		"key": "billingManagementAdminApi",
+		"value": "{{Host}}/DSBillingManagement/api/admin",
+		"type": "text",
+		"name": "billingManagementAdminApi",
+		"enabled": true
+	},
+	{
+		"key": "billingManagementSubscriberApi",
+		"value": "{{Host}}/DSBillingManagement/subscriber/api",
+		"type": "text",
+		"name": "billingManagementSubscriberApi",
+		"enabled": true
+	},
+	{
+		"key": "partyManagementApi",
+		"value": "{{Host}}/DSPartyManagement/api/partyManagement/v2",
+		"type": "text",
+		"name": "partyManagementApi",
+		"enabled": true
+	},
+	{
+		"key": "partyManagementAdminApi",
+		"value": "{{Host}}/DSPartyManagement/api/admin",
+		"type": "text",
+		"name": "partyManagementAdminApi",
+		"enabled": true
+	},
+	{
+		"key": "partyManagementSubscriberApi",
+		"value": "{{Host}}/DSPartyManagement/subscriber/api",
+		"type": "text",
+		"name": "partyManagementSubscriberApi",
+		"enabled": true
+	},
+	{
+		"key": "customerManagementApi",
+		"value": "{{Host}}/DSCustomerManagement/api/customerManagement/v2",
+		"type": "text",
+		"name": "customerManagementApi",
+		"enabled": true
+	},
+	{
+		"key": "customerManagementAdminApi",
+		"value": "{{Host}}/DSCustomerManagement/api/customerManagement/v2/admin",
+		"type": "text",
+		"name": "customerManagementAdminApi",
+		"enabled": true
+	},
+	{
+		"key": "customerManagementSubsciberApi",
+		"value": "{{Host}}/DSCustomerManagement/subscriber/api",
+		"type": "text",
+		"name": "customerManagementSubsciberApi",
+		"enabled": true
+	},
+	{
+		"key": "productOrderingApi",
+		"value": "{{Host}}/DSPRODUCTORDERING/api/productOrdering/v2",
+		"type": "text",
+		"name": "productOrderingApi",
+		"enabled": true
+	},
+	{
+		"key": "productOrderingAdminApi",
+		"value": "{{Host}}/DSPRODUCTORDERING/api/admin",
+		"type": "text",
+		"name": "productOrderingAdminApi",
+		"enabled": true
+	},
+	{
+		"key": "troubleTicketingApi",
+		"value": "{{Host}}/DSTroubleTicket/api/troubleTicketManagement/v2",
+		"type": "text",
+		"name": "troubleTicketingApi",
+		"enabled": true
+	},
+	{
+		"key": "troubleTicketingAdminApi",
+		"value": "{{Host}}/DSTroubleTicket/api/troubleTicketManagement/v2/admin",
+		"type": "text",
+		"name": "troubleTicketingAdminApi",
+		"enabled": true
+	},
+	{
+		"key": "troubleTicketingSubscriberApi",
+		"value": "{{Host}}/DSTroubleTicket/subscriber/eventApi",
+		"type": "text",
+		"name": "troubleTicketingSubscriberApi",
+		"enabled": true
+	}
+]

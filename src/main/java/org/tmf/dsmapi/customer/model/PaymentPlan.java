@@ -76,7 +76,7 @@ public class PaymentPlan
     private final static long serialVersionUID = 11L;
     protected String status;
     protected String type;
-    protected String priority;
+    protected Float priority;
     protected Float amount;
     protected String paymentFrequency;
     protected String numberOfPayments;
@@ -147,7 +147,7 @@ public class PaymentPlan
      */
     @Basic
     @Column(name = "PRIORITY", length = 255)
-    public String getPriority() {
+    public Float getPriority() {
         return priority;
     }
 
@@ -159,7 +159,7 @@ public class PaymentPlan
      *     {@link String }
      *     
      */
-    public void setPriority(String value) {
+    public void setPriority(Float value) {
         this.priority = value;
     }
 

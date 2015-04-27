@@ -55,6 +55,7 @@ public class CustomerEvent implements Serializable {
 
     private Customer resource; //check for object
 
+   @JsonProperty("eventId")
     public String getId() {
         return id;
     }

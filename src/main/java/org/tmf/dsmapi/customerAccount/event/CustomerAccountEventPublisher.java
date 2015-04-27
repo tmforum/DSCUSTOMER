@@ -57,17 +57,17 @@ public class CustomerAccountEventPublisher implements CustomerAccountEventPublis
     public void createNotification(CustomerAccount bean, Date date) {
         CustomerAccountEvent event = new CustomerAccountEvent();
         event.setEventTime(date);
-        event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountCreationNotification);
+        event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountCreateNotification);
         event.setResource(bean);
         publish(event);
 
     }
 
     @Override
-    public void deletionNotification(CustomerAccount bean, Date date) {
+    public void deleteNotification(CustomerAccount bean, Date date) {
         CustomerAccountEvent event = new CustomerAccountEvent();
         event.setEventTime(date);
-        event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountDeletionNotification);
+        event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountDeleteNotification);
         event.setResource(bean);
         publish(event);
     }
@@ -81,12 +81,4 @@ public class CustomerAccountEventPublisher implements CustomerAccountEventPublis
         publish(event);
     }
 
-    @Override
-    public void valueChangedNotification(CustomerAccount bean, Date date) {
-        CustomerAccountEvent event = new CustomerAccountEvent();
-        event.setEventTime(date);
-        event.setEventType(CustomerAccountEventTypeEnum.CustomerAccountValueChangeNotification);
-        event.setResource(bean);
-        publish(event);
-    }
 }

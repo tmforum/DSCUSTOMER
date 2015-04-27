@@ -1,6 +1,7 @@
 package org.tmf.dsmapi.paymentMean;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +19,11 @@ import javax.ws.rs.core.Response;
 import org.tmf.dsmapi.commons.exceptions.BadUsageException;
 import org.tmf.dsmapi.commons.exceptions.UnknownResourceException;
 import org.tmf.dsmapi.commons.jaxrs.Report;
+import org.tmf.dsmapi.customer.model.BankAccount;
+import org.tmf.dsmapi.customer.model.CreditCard;
 import org.tmf.dsmapi.customer.model.PaymentMean;
+import org.tmf.dsmapi.customer.model.RelatedParty;
+import org.tmf.dsmapi.customer.model.ValidFor;
 import org.tmf.dsmapi.paymentMean.event.PaymentMeanEvent;
 import org.tmf.dsmapi.paymentMean.event.PaymentMeanEventFacade;
 import org.tmf.dsmapi.paymentMean.event.PaymentMeanEventPublisherLocal;
@@ -88,7 +93,7 @@ public class PaymentMeanAdminResource {
         if (customer != null) {
             entity.setId(id);
             customerFacade.edit(entity);
-            publisher.valueChangedNotification(entity, new Date());
+            publisher.updateNotification(entity, new Date());
             // 201 OK + location
             response = Response.status(Response.Status.CREATED).entity(entity).build();
 
@@ -141,7 +146,7 @@ public class PaymentMeanAdminResource {
             PaymentMean entity = customerFacade.find(id);
 
             // Event deletion
-            publisher.deletionNotification(entity, new Date());
+            publisher.deleteNotification(entity, new Date());
             try {
                 //Pause for 4 seconds to finish notification
                 Thread.sleep(4000);
@@ -230,4 +235,47 @@ public class PaymentMeanAdminResource {
     public Report count() {
         return new Report(customerFacade.count());
     }
+
+    @GET
+    @Produces({"application/json"})
+    @Path("proto")
+    public PaymentMean proto() {
+        GregorianCalendar gc = new GregorianCalendar();
+        ValidFor validFor = null;
+
+        PaymentMean paymentMean = new PaymentMean();
+        paymentMean.setName("My favourite payment mean");
+        validFor = new ValidFor();
+        gc.set(2015, 04, 01);
+        validFor.setStartDateTime(gc.getTime());
+        gc.set(2099, 01, 01);
+        validFor.setEndDateTime(gc.getTime());
+        paymentMean.setValidFor(validFor);
+        paymentMean.setType("BankAccountDebit");
+        
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setBIC("PSSTFRPPPAR");
+        bankAccount.setDomiciliation("LaBanquePostale–75900ParixCedex15");
+        bankAccount.setIBAN("FR4620061009010835927F33098");
+        bankAccount.setAccountHolder("Mr.GustaveFlaubert");
+        paymentMean.setBankAccount(bankAccount);
+        
+        RelatedParty relatedParty = new RelatedParty();
+        relatedParty.setId("1");
+        relatedParty.setHref("http://serverlocation:port/partyManagement/individual/1");
+        relatedParty.setRole("customer");
+        relatedParty.setName("Gustave Flaubert");
+        paymentMean.setRelatedParty(relatedParty);
+        
+        CreditCard creditcard = new CreditCard();
+        creditcard.setType("MasterCard");
+        gc.set(2020, 01, 01);
+        creditcard.setExpirationDate(gc.getTime());
+        creditcard.setNumber("CreditCardNumber");
+        creditcard.setHolder("Gustave Flaubert");
+        paymentMean.setCreditCard(creditcard);
+        
+        return paymentMean;
+    }
+
 }

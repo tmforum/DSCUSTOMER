@@ -6,10 +6,9 @@ package org.tmf.dsmapi.customer.event;
 
 public enum CustomerEventTypeEnum {
 
-    CustomerCreationNotification("CustomerCreationNotification"),
+    CustomerCreateNotification("CustomerCreateNotification"),
     CustomerUpdateNotification("CustomerUpdateNotification"),
-    CustomerDeletionNotification("CustomerDeletionNotification"),
-    CustomerValueChangeNotification("CustomerValueChangeNotification");
+    CustomerDeleteNotification("CustomerDeleteNotification");
 
     private String text;
 

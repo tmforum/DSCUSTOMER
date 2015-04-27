@@ -32,9 +32,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.tmf.dsmapi.commons.utils.CustomDateTimeAdapter;
+import org.tmf.dsmapi.commons.utils.CustomJsonDateSerializer;
 
 
 /**
@@ -115,7 +114,7 @@ public class CustomerAccount
     protected List<CustomerAccountBalance> customerAccountBalance;
     protected List<PaymentPlan> paymentPlan;
     @XmlElement(type = String.class)
-    @XmlJavaTypeAdapter(CustomDateTimeAdapter.class)
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
     @XmlSchemaType(name = "dateTime")
     protected Date lastModified;
 
