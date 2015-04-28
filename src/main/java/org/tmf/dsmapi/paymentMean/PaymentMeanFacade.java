@@ -1,8 +1,6 @@
 package org.tmf.dsmapi.paymentMean;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.tmf.dsmapi.commons.facade.AbstractFacade;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -49,29 +47,23 @@ public class PaymentMeanFacade extends AbstractFacade<PaymentMean> {
 
     public void checkCreation(PaymentMean paymentMean) throws BadUsageException {
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.convertValue(paymentMean, JsonNode.class);
-
-        List<String> updateNodesName = new ArrayList<>();
-        updateNodesName = BeanUtils.getNodesName(node, paymentMean, "paymentMean", updateNodesName);
-
-        if (!updateNodesName.contains("paymentMean.name")) {
+        if (null == paymentMean.getName()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "name is mandatory");
         }
 
-        if (!updateNodesName.contains("paymentMean.relatedParty")) {
+        if (null == paymentMean.getRelatedParty()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "relatedParty is mandatory");
         }
 
-        if (!updateNodesName.contains("paymentMean.type")) {
+        if (null == paymentMean.getType()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "type is mandatory");
         } else {
-            if (! paymentMean.getType().equalsIgnoreCase("CreditCard")) {
-                if (!updateNodesName.contains("paymentMean.bankAccount")) {
+            if (!paymentMean.getType().equalsIgnoreCase("CreditCard")) {
+                if (null == paymentMean.getBankAccount()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "paymentMean.bankAccount is mandatory if patmentMean.type is not 'CreditCard'");
                 }
             } else {
-                if (!updateNodesName.contains("paymentMean.creditCard")) {
+                if (null == paymentMean.getCreditCard()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "paymentMean.creditCard is mandatory if patmentMean.type is not 'CreditCard'");
                 }
             }
@@ -100,27 +92,20 @@ public class PaymentMeanFacade extends AbstractFacade<PaymentMean> {
 
     public void checkUpdate(PaymentMean paymentMean) throws BadUsageException {
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.convertValue(paymentMean, JsonNode.class);
-
-        List<String> updateNodesName = new ArrayList<>();
-        updateNodesName = BeanUtils.getNodesName(node, paymentMean, "paymentMean", updateNodesName);
-
-        if (updateNodesName.contains("paymentMean.id")) {
+        if (null != paymentMean.getId()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_OPERATOR, "'id' is not modifiable");
         }
 
-        if (updateNodesName.contains("paymentMean.href")) {
+        if (null != paymentMean.getHref()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "'href is not modifiable");
         }
 
-        if (!updateNodesName.contains("paymentMean.name")) {
+        if (null != paymentMean.getName()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "name is mandatory");
         }
 
-        if (!updateNodesName.contains("paymentMean.validFor")) {
+        if (null != paymentMean.getValidFor()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "validFor is mandatory");
         }
     }
-
 }

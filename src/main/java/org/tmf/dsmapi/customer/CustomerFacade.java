@@ -1,6 +1,5 @@
 package org.tmf.dsmapi.customer;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.tmf.dsmapi.commons.facade.AbstractFacade;
@@ -21,7 +20,6 @@ import org.tmf.dsmapi.customer.model.ContactMedium;
 import org.tmf.dsmapi.customer.model.CustomerAccount;
 import org.tmf.dsmapi.customer.model.CustomerCreditProfile;
 import org.tmf.dsmapi.customer.model.PaymentMean;
-import org.tmf.dsmapi.customer.model.RelatedParty;
 
 /**
  *
@@ -55,23 +53,17 @@ public class CustomerFacade extends AbstractFacade<Customer> {
 
     public void checkCreation(Customer newCustomer) throws BadUsageException {
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.convertValue(newCustomer, JsonNode.class);
-
-        List<String> updateNodesName = new ArrayList<>();
-        updateNodesName = BeanUtils.getNodesName(node, newCustomer, "customer", updateNodesName);
-
-        if (!updateNodesName.contains("customer.name")) {
+        if (null == newCustomer.getName()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "name is mandatory");
         }
 
-        if (updateNodesName.contains("customer.relatedParty")) {
+        if (null != newCustomer.getRelatedParty()) {
             if (null == newCustomer.getRelatedParty().getHref()) {
                 throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "relatedParty.href is mandatory");
             }
         }
 
-        if (updateNodesName.contains("customer.characteristic")) {
+        if (null != newCustomer.getCharacteristic()) {
             List<Characteristic> l_characteristic = newCustomer.getCharacteristic();
             for (Characteristic characteristic : l_characteristic) {
                 if (null == characteristic.getName()) {
@@ -83,7 +75,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.contactMedium")) {
+        if (null != newCustomer.getContactMedium()) {
             List<ContactMedium> l_contactMedium = newCustomer.getContactMedium();
             for (ContactMedium contactMedium : l_contactMedium) {
                 if (null == contactMedium.getType()) {
@@ -95,7 +87,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.customerAccount")) {
+        if (null != newCustomer.getCustomerAccount()) {
             List<CustomerAccount> l_customerAccount = newCustomer.getCustomerAccount();
             for (CustomerAccount customerAccount : l_customerAccount) {
                 if (null == customerAccount.getId()) {
@@ -110,7 +102,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.customerCreditProfile")) {
+        if (null != newCustomer.getCustomerCreditProfile()) {
             List<CustomerCreditProfile> l_customerCreditProfile = newCustomer.getCustomerCreditProfile();
             for (CustomerCreditProfile customerCreditProfile : l_customerCreditProfile) {
                 if (null == customerCreditProfile.getCreditProfileDate()) {
@@ -122,7 +114,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.paymentMean")) {
+        if (null != newCustomer.getPaymentMean()) {
             List<PaymentMean> l_paymentMean = newCustomer.getPaymentMean();
             for (PaymentMean paymentMean : l_paymentMean) {
                 if (null == paymentMean.getId()) {
@@ -143,24 +135,17 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             throw new UnknownResourceException(ExceptionType.UNKNOWN_RESOURCE);
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.convertValue(partialCustomer, JsonNode.class);
-        partialCustomer.setId(id);
-
-        List<String> updateNodesName = new ArrayList<>();
-        updateNodesName = BeanUtils.getNodesName(node, partialCustomer, "customer", updateNodesName);
-
-        if (updateNodesName.contains("customer.id")) {
+        if (null != partialCustomer.getId()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_OPERATOR, "customer.id is not modifiable");
         }
 
-        if (updateNodesName.contains("customer.relatedParty")) {
+        if (null != partialCustomer.getRelatedParty()) {
             if (null == partialCustomer.getRelatedParty().getId()) {
                 throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "relatedParty.id is mandatory");
             }
         }
 
-        if (updateNodesName.contains("customer.characteristic")) {
+        if (null != partialCustomer.getCharacteristic()) {
             List<Characteristic> l_characteristic = partialCustomer.getCharacteristic();
             for (Characteristic characteristic : l_characteristic) {
                 if (null == characteristic.getName()) {
@@ -172,7 +157,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.contactMedium")) {
+        if (null != partialCustomer.getContactMedium()) {
             List<ContactMedium> l_contactMedium = partialCustomer.getContactMedium();
             for (ContactMedium contactMedium : l_contactMedium) {
                 if (null == contactMedium.getType()) {
@@ -184,7 +169,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.customerAccount")) {
+        if (null != partialCustomer.getCustomerAccount()) {
             List<CustomerAccount> l_customerAccount = partialCustomer.getCustomerAccount();
             for (CustomerAccount customerAccount : l_customerAccount) {
                 if (null == customerAccount.getId()) {
@@ -199,7 +184,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.customerCreditProfile")) {
+        if (null != partialCustomer.getCustomerCreditProfile()) {
             List<CustomerCreditProfile> l_customerCreditProfile = partialCustomer.getCustomerCreditProfile();
             for (CustomerCreditProfile customerCreditProfile : l_customerCreditProfile) {
                 if (null == customerCreditProfile.getCreditProfileDate()) {
@@ -211,7 +196,7 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (updateNodesName.contains("customer.paymentMean")) {
+        if (null != partialCustomer.getPaymentMean()) {
             List<PaymentMean> l_paymentMean = partialCustomer.getPaymentMean();
             for (PaymentMean paymentMean : l_paymentMean) {
                 if (null == paymentMean.getId()) {
@@ -223,6 +208,8 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.convertValue(partialCustomer, JsonNode.class);
         partialCustomer.setId(id);
         if (BeanUtils.patch(currentCustomer, partialCustomer, node)) {
             publisher.updateNotification(currentCustomer, new Date());
