@@ -57,7 +57,7 @@ public class PaymentMeanResource {
     public Response create(PaymentMean entity) throws BadUsageException, UnknownResourceException {
         customerFacade.checkCreation(entity);
         customerFacade.create(entity);
-        entity.setHref("href/".concat(Long.toString(entity.getId())));
+        entity.setHref("http://serverLocalisation:port/DSCustomerManagement/api/customerManagement/v2/paymentMean/".concat(Long.toString(entity.getId())));
         customerFacade.edit(entity);
         publisher.createNotification(entity, new Date());
         // 201

@@ -57,7 +57,7 @@ public class CustomerAccountResource {
     public Response create(CustomerAccount entity) throws BadUsageException, UnknownResourceException {
         customerFacade.checkCreationOrUpdate(entity);
         customerFacade.create(entity);
-        entity.setHref("href/".concat(Long.toString(entity.getId())));
+        entity.setHref("http://serverLocalisation:port/DSCustomerManagement/api/customerManagement/v2/customerAccount/".concat(Long.toString(entity.getId())));
         customerFacade.edit(entity);
         publisher.createNotification(entity, new Date());
         // 201

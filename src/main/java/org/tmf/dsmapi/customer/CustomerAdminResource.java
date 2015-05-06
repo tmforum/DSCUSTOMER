@@ -251,7 +251,7 @@ public class CustomerAdminResource {
         Customer customer = new Customer();
 
         customer.setId(new Long(123));
-        customer.setHref("href/123");
+        customer.setHref("http://serverLocalisation:port/DSCustomerManagement/api/customerManagement/v2/customerAccount/123");
         customer.setName("DisplayName");
         customer.setStatus("New");
         customer.setDescription("customer description");
