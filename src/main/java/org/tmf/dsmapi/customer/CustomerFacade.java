@@ -18,8 +18,10 @@ import org.tmf.dsmapi.customer.event.CustomerEventPublisherLocal;
 import org.tmf.dsmapi.customer.model.Characteristic;
 import org.tmf.dsmapi.customer.model.ContactMedium;
 import org.tmf.dsmapi.customer.model.CustomerAccount;
+import org.tmf.dsmapi.customer.model.CustomerAccountRef;
 import org.tmf.dsmapi.customer.model.CustomerCreditProfile;
 import org.tmf.dsmapi.customer.model.PaymentMean;
+import org.tmf.dsmapi.customer.model.PaymentMeanRef;
 
 /**
  *
@@ -63,7 +65,8 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != newCustomer.getCharacteristic()) {
+        if (null != newCustomer.getCharacteristic()
+                && ! newCustomer.getCharacteristic().isEmpty() ) {
             List<Characteristic> l_characteristic = newCustomer.getCharacteristic();
             for (Characteristic characteristic : l_characteristic) {
                 if (null == characteristic.getName()) {
@@ -75,7 +78,8 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != newCustomer.getContactMedium()) {
+        if (null != newCustomer.getContactMedium()
+                && ! newCustomer.getContactMedium().isEmpty() ) {
             List<ContactMedium> l_contactMedium = newCustomer.getContactMedium();
             for (ContactMedium contactMedium : l_contactMedium) {
                 if (null == contactMedium.getType()) {
@@ -87,22 +91,24 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != newCustomer.getCustomerAccount()) {
-            List<CustomerAccount> l_customerAccount = newCustomer.getCustomerAccount();
-            for (CustomerAccount customerAccount : l_customerAccount) {
-                if (null == customerAccount.getId()) {
+        if (null != newCustomer.getCustomerAccount()
+                && !newCustomer.getCustomerAccount().isEmpty() ) {
+            List<CustomerAccountRef> l_customerAccount = newCustomer.getCustomerAccount();
+            for (CustomerAccountRef customerAccountRef : l_customerAccount) {
+                if (null == customerAccountRef.getId()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "customerAccount.id is mandatory");
                 }
-                if (null == customerAccount.getName()) {
+                if (null == customerAccountRef.getName()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "customerAccount.name is mandatory");
                 }
-                if (null == customerAccount.getStatus()) {
+                if (null == customerAccountRef.getStatus()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "customerAccount.status is mandatory");
                 }
             }
         }
 
-        if (null != newCustomer.getCustomerCreditProfile()) {
+        if (null != newCustomer.getCustomerCreditProfile()
+                && !newCustomer.getCustomerCreditProfile().isEmpty() ) {
             List<CustomerCreditProfile> l_customerCreditProfile = newCustomer.getCustomerCreditProfile();
             for (CustomerCreditProfile customerCreditProfile : l_customerCreditProfile) {
                 if (null == customerCreditProfile.getCreditProfileDate()) {
@@ -114,9 +120,10 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != newCustomer.getPaymentMean()) {
-            List<PaymentMean> l_paymentMean = newCustomer.getPaymentMean();
-            for (PaymentMean paymentMean : l_paymentMean) {
+        if (null != newCustomer.getPaymentMean()
+                && !newCustomer.getPaymentMean().isEmpty()) {
+            List<PaymentMeanRef> l_paymentMean = newCustomer.getPaymentMean();
+            for (PaymentMeanRef paymentMean : l_paymentMean) {
                 if (null == paymentMean.getId()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "paymentMean.id is mandatory");
                 }
@@ -145,7 +152,8 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != partialCustomer.getCharacteristic()) {
+        if (null != partialCustomer.getCharacteristic()
+                && !partialCustomer.getCharacteristic().isEmpty() ) {
             List<Characteristic> l_characteristic = partialCustomer.getCharacteristic();
             for (Characteristic characteristic : l_characteristic) {
                 if (null == characteristic.getName()) {
@@ -157,7 +165,8 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != partialCustomer.getContactMedium()) {
+        if (null != partialCustomer.getContactMedium()
+               &&  ! partialCustomer.getContactMedium().isEmpty() ) {
             List<ContactMedium> l_contactMedium = partialCustomer.getContactMedium();
             for (ContactMedium contactMedium : l_contactMedium) {
                 if (null == contactMedium.getType()) {
@@ -169,9 +178,10 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != partialCustomer.getCustomerAccount()) {
-            List<CustomerAccount> l_customerAccount = partialCustomer.getCustomerAccount();
-            for (CustomerAccount customerAccount : l_customerAccount) {
+        if (null != partialCustomer.getCustomerAccount()
+                && !partialCustomer.getCustomerAccount().isEmpty()) {
+            List<CustomerAccountRef> l_customerAccount = partialCustomer.getCustomerAccount();
+            for (CustomerAccountRef customerAccount : l_customerAccount) {
                 if (null == customerAccount.getId()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "customerAccount.id is mandatory");
                 }
@@ -184,7 +194,8 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != partialCustomer.getCustomerCreditProfile()) {
+        if (null != partialCustomer.getCustomerCreditProfile()
+                && !partialCustomer.getCustomerCreditProfile().isEmpty() ) {
             List<CustomerCreditProfile> l_customerCreditProfile = partialCustomer.getCustomerCreditProfile();
             for (CustomerCreditProfile customerCreditProfile : l_customerCreditProfile) {
                 if (null == customerCreditProfile.getCreditProfileDate()) {
@@ -196,9 +207,10 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             }
         }
 
-        if (null != partialCustomer.getPaymentMean()) {
-            List<PaymentMean> l_paymentMean = partialCustomer.getPaymentMean();
-            for (PaymentMean paymentMean : l_paymentMean) {
+        if (null != partialCustomer.getPaymentMean()
+                && !partialCustomer.getPaymentMean().isEmpty() ) {
+            List<PaymentMeanRef> l_paymentMean = partialCustomer.getPaymentMean();
+            for (PaymentMeanRef paymentMean : l_paymentMean) {
                 if (null == paymentMean.getId()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "paymentMean.id is mandatory");
                 }

@@ -96,9 +96,9 @@ public class Customer
     protected RelatedParty relatedParty;
     protected List<Characteristic> characteristic;
     protected List<ContactMedium> contactMedium;
-    protected List<CustomerAccount> customerAccount;
+    protected List<CustomerAccountRef> customerAccount;
     protected List<CustomerCreditProfile> customerCreditProfile;
-    protected List<PaymentMean> paymentMean;
+    protected List<PaymentMeanRef> paymentMean;
 
     /**
      * Obtient la valeur de la propriété id.
@@ -407,32 +407,25 @@ public class Customer
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getCustomerAccount().add(newItem);
-     * </pre>
-     * 
+    getCustomerAccount().add(newItem);
+    </pre>
+     *
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CustomerAccount }
-     * 
+     * {@link CustomerAccountRef }
+     *
      * 
      */
-    @OneToMany(targetEntity = CustomerAccount.class, cascade = {
+    @OneToMany(targetEntity = CustomerAccountRef.class, cascade = {
         CascadeType.ALL
     })
-    @JoinColumn(name = "CUSTOMER_ACCOUNT_CUSTOMER_ID")
-    public List<CustomerAccount> getCustomerAccount() {
-        if (customerAccount == null) {
-            customerAccount = new ArrayList<CustomerAccount>();
-        }
-        return this.customerAccount;
+    @JoinColumn(name = "CUSTOMER_ACCOUNT_REF_CUSTOMER_ID")
+    public List<CustomerAccountRef> getCustomerAccount() {
+        return customerAccount;
     }
 
-    /**
-     * 
-     * 
-     */
-    public void setCustomerAccount(List<CustomerAccount> customerAccount) {
+    public void setCustomerAccount(List<CustomerAccountRef> customerAccount) {
         this.customerAccount = customerAccount;
     }
 
@@ -450,17 +443,15 @@ public class Customer
      * <pre>
      *    getCustomerCreditProfile().add(newItem);
      * </pre>
-     * 
+     *
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CustomerCreditProfile }
-     * 
+     *
      * 
      */
-    @OneToMany(targetEntity = CustomerCreditProfile.class, cascade = {
-        CascadeType.ALL
-    })
+    @OneToMany(targetEntity = CustomerCreditProfile.class, cascade = {CascadeType.ALL})
     @JoinColumn(name = "CUSTOMER_CREDIT_PROFILE_CUST_0")
     public List<CustomerCreditProfile> getCustomerCreditProfile() {
         if (customerCreditProfile == null) {
@@ -489,33 +480,27 @@ public class Customer
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPaymentMean().add(newItem);
-     * </pre>
+    getPaymentMean().add(newItem);
+ </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link PaymentMean }
+     * {@link PaymentMeanRef }
      * 
      * 
      */
-    @OneToMany(targetEntity = PaymentMean.class, cascade = {
+    @OneToMany(targetEntity = PaymentMeanRef.class, cascade = {
         CascadeType.ALL
     })
-    @JoinColumn(name = "PAYMENT_MEAN_CUSTOMER_ID")
-    public List<PaymentMean> getPaymentMean() {
-        if (paymentMean == null) {
-            paymentMean = new ArrayList<PaymentMean>();
-        }
-        return this.paymentMean;
+    @JoinColumn(name = "PAYMENT_MEAN_REF_CUSTOMER_ID")
+    public List<PaymentMeanRef> getPaymentMean() {
+        return paymentMean;
     }
 
-    /**
-     * 
-     * 
-     */
-    public void setPaymentMean(List<PaymentMean> paymentMean) {
+    public void setPaymentMean(List<PaymentMeanRef> paymentMean) {
         this.paymentMean = paymentMean;
     }
 
+    
 }

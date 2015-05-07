@@ -70,7 +70,7 @@ public class CustomerAccountRelationship
     protected String relationshipType;
     protected ValidFor validFor;
     protected List<CustomerAccountRef> customerAccount;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

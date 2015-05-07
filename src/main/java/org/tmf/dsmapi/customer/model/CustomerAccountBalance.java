@@ -70,7 +70,7 @@ public class CustomerAccountBalance
     protected Float amount;
     protected ValidFor validFor;
     protected String status;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

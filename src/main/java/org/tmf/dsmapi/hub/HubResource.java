@@ -193,17 +193,17 @@ public class HubResource {
 
         customer.setContactMedium(contactMediums);
 
-        List<CustomerAccount> customerAccounts = new ArrayList<CustomerAccount>();
-        CustomerAccount ca = new CustomerAccount();
-        ca.setId(new Long(1));
+        List<CustomerAccountRef> customerAccounts = new ArrayList<CustomerAccountRef>();
+        CustomerAccountRef ca = new CustomerAccountRef();
+        ca.setId("1");
         ca.setHref("http://serverlocation:port/customerManagement/customerAccount/1");
         ca.setName("customerAccount1");
         ca.setDescription("CustomerAccountDesc1");
         ca.setStatus("Active");
         customerAccounts.add(ca);
 
-        ca = new CustomerAccount();
-        ca.setId(new Long(2));
+        ca = new CustomerAccountRef();
+        ca.setId("2");
         ca.setHref("http://serverlocation:port/customerManagement/customerAccount/2");
         ca.setName("customerAccount2");
         ca.setDescription("CustomerAccountDesc2");
@@ -236,15 +236,15 @@ public class HubResource {
 
         customer.setCustomerCreditProfile(customerCreditProfiles);
 
-        List<PaymentMean> paymentMeans = new ArrayList<PaymentMean>();
-        PaymentMean pm = new PaymentMean();
-        pm.setId(new Long(45));
+        List<PaymentMeanRef> paymentMeans = new ArrayList<PaymentMeanRef>();
+        PaymentMeanRef pm = new PaymentMeanRef();
+        pm.setId("45");
         pm.setHref("http://serverlocation:port/customerManagement/paymentMean/45");
         pm.setName("my favourite payment mean");
         paymentMeans.add(pm);
 
-        pm = new PaymentMean();
-        pm.setId(new Long(64));
+        pm = new PaymentMeanRef();
+        pm.setId("64");
         pm.setHref("http://serverlocation:port/customerManagement/paymentMean/64");
         pm.setName("my credit card payment mean");
         paymentMeans.add(pm);

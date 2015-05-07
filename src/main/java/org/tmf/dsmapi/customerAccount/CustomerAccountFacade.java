@@ -65,7 +65,8 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
                     "accountType is mandatory");
         }
 
-        if (null != customerAccount.getCustomerAccountTaxExemption()) {
+        if (null != customerAccount.getCustomerAccountTaxExemption()
+                && !customerAccount.getCustomerAccountTaxExemption().isEmpty()) {
             List<CustomerAccountTaxExemption> l_customerAccountTaxExemption = customerAccount.getCustomerAccountTaxExemption();
             for (CustomerAccountTaxExemption customerAccountTaxExemption : l_customerAccountTaxExemption) {
                 if (null == customerAccountTaxExemption.getIssuingJurisdiction()) {
@@ -79,7 +80,8 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
             }
         }
 
-        if (null != customerAccount.getCustomerAccountRelationship()) {
+        if (null != customerAccount.getCustomerAccountRelationship()
+                && !customerAccount.getCustomerAccountRelationship().isEmpty() ) {
             List<CustomerAccountRelationship> l_customerAccountRelationship = customerAccount.getCustomerAccountRelationship();
             for (CustomerAccountRelationship customerAccountRelationship : l_customerAccountRelationship) {
                 if (null == customerAccountRelationship.getRelationshipType()) {
@@ -93,7 +95,8 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
             }
         }
 
-        if (null != customerAccount.getContact()) {
+        if (null != customerAccount.getContact()
+                && !customerAccount.getContact().isEmpty()) {
             List<Contact> l_contact = customerAccount.getContact();
             for (Contact contact : l_contact) {
                 if (null == contact.getType()) {
@@ -118,7 +121,8 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
             }
         }
 
-        if (null != customerAccount.getCustomerAccountBalance()) {
+        if (null != customerAccount.getCustomerAccountBalance()
+                && ! customerAccount.getCustomerAccountBalance().isEmpty()) {
             List<CustomerAccountBalance> l_customerAccountBalance = customerAccount.getCustomerAccountBalance();
             for (CustomerAccountBalance customerAccountBalance : l_customerAccountBalance) {
                 if (null == customerAccountBalance.getType()) {
@@ -140,7 +144,8 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
             }
         }
 
-        if (null != customerAccount.getPaymentPlan()) {
+        if (null != customerAccount.getPaymentPlan()
+                && !customerAccount.getPaymentPlan().isEmpty()) {
             List<PaymentPlan> l_paymentPlan = customerAccount.getPaymentPlan();
             for (PaymentPlan paymentPlan : l_paymentPlan) {
                 if (null == paymentPlan.getStatus()) {

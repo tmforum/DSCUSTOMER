@@ -34,6 +34,10 @@ import org.tmf.dsmapi.customer.model.Customer;
 import org.tmf.dsmapi.customer.event.CustomerEventPublisherLocal;
 import org.tmf.dsmapi.customer.event.CustomerEvent;
 import org.tmf.dsmapi.customer.event.CustomerEventFacade;
+import org.tmf.dsmapi.customer.model.CustomerAccount;
+import org.tmf.dsmapi.customer.model.CustomerAccountRef;
+import org.tmf.dsmapi.customer.model.PaymentMean;
+import org.tmf.dsmapi.customer.model.PaymentMeanRef;
 
 @Stateless
 @Path("customer")

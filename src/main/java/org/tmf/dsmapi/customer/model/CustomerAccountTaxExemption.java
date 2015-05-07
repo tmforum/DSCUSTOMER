@@ -70,7 +70,7 @@ public class CustomerAccountTaxExemption
     protected String certificateNumber;
     protected String reason;
     protected ValidFor validFor;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

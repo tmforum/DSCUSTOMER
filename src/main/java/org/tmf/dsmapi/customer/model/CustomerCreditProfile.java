@@ -79,7 +79,7 @@ public class CustomerCreditProfile
     protected ValidFor validFor;
     protected String creditRiskRating;
     protected String creditScore;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

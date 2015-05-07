@@ -67,7 +67,7 @@ public class RelatedParty
     protected String href;
     protected String role;
     protected String name;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

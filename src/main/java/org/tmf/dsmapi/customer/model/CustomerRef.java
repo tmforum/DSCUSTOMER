@@ -67,7 +67,7 @@ public class CustomerRef
     protected String href;
     protected String name;
     protected String description;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

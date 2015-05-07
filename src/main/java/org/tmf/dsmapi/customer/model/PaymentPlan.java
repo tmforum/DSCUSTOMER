@@ -82,7 +82,7 @@ public class PaymentPlan
     protected String numberOfPayments;
     protected ValidFor validFor;
     protected PaymentMeanRef paymentMean;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

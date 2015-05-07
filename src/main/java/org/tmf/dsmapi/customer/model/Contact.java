@@ -79,7 +79,7 @@ public class Contact
     protected String partyRoleType;
     protected List<ContactMedium> medium;
     protected RelatedParty relatedParty;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

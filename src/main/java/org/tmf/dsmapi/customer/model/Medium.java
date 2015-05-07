@@ -82,7 +82,7 @@ public class Medium
     protected String stateOrProvince;
     protected String streetOne;
     protected String streetTwo;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

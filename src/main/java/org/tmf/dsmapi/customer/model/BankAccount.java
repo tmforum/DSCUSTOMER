@@ -70,7 +70,7 @@ public class BankAccount
     @XmlElement(name = "iBAN")
     protected String iban;
     protected String accountHolder;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**

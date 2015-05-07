@@ -70,7 +70,7 @@ public class ContactMedium
     protected ValidFor validFor;
     protected Medium medium;
     protected Boolean preferred;
-    @XmlAttribute(name = "Hjid")
+    @org.codehaus.jackson.annotate.JsonIgnore
     protected Long hjid;
 
     /**
