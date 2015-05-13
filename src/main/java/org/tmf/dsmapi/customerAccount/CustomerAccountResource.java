@@ -35,7 +35,7 @@ import org.tmf.dsmapi.customerAccount.event.CustomerAccountEvent;
 import org.tmf.dsmapi.customerAccount.event.CustomerAccountEventFacade;
 
 @Stateless
-@Path("customerAccount")
+@Path("/customerManagement/v2/customerAccount")
 public class CustomerAccountResource {
 
     @EJB

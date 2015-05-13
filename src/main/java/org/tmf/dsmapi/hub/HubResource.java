@@ -44,7 +44,7 @@ import org.tmf.dsmapi.paymentMean.event.PaymentMeanEvent;
 import org.tmf.dsmapi.paymentMean.event.PaymentMeanEventTypeEnum;
 
 @Stateless
-@Path("hub")
+@Path("/customerManagement/v2/hub")
 public class HubResource {
 
     @EJB
