@@ -54,10 +54,10 @@ public class CustomerAccountResource {
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
-    public Response create(CustomerAccount entity) throws BadUsageException, UnknownResourceException {
+    public Response create(CustomerAccount entity, @Context UriInfo info) throws BadUsageException, UnknownResourceException {
         customerFacade.checkCreationOrUpdate(entity);
         customerFacade.create(entity);
-        entity.setHref("http://serverLocalisation:port/DSCustomerManagement/api/customerManagement/v2/customerAccount/".concat(Long.toString(entity.getId())));
+        entity.setHref(info.getAbsolutePath()+ "/" + Long.toString(entity.getId()));
         customerFacade.edit(entity);
         publisher.createNotification(entity, new Date());
         // 201
