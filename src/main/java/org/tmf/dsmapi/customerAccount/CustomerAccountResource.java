@@ -57,7 +57,7 @@ public class CustomerAccountResource {
     public Response create(CustomerAccount entity, @Context UriInfo info) throws BadUsageException, UnknownResourceException {
         customerFacade.checkCreationOrUpdate(entity);
         customerFacade.create(entity);
-        entity.setHref(info.getAbsolutePath()+ "/" + Long.toString(entity.getId()));
+        entity.setHref(info.getAbsolutePath() + "/" + Long.toString(entity.getId()));
         customerFacade.edit(entity);
         publisher.createNotification(entity, new Date());
         // 201
@@ -165,7 +165,6 @@ public class CustomerAccountResource {
 //        }
 //        return response;
 //    }
-
     /**
      *
      * For test purpose only
@@ -176,35 +175,28 @@ public class CustomerAccountResource {
      */
     @DELETE
     @Path("{id}")
-    public Response delete(@PathParam("id") long id) {
+    public Response delete(@PathParam("id") long id) throws UnknownResourceException {
+        CustomerAccount entity = customerFacade.find(id);
+
+        // Event deletion
+        publisher.deleteNotification(entity, new Date());
         try {
-            CustomerAccount entity = customerFacade.find(id);
-
-            // Event deletion
-            publisher.deleteNotification(entity, new Date());
-            try {
-                //Pause for 4 seconds to finish notification
-                Thread.sleep(4000);
-            } catch (InterruptedException ex) {
-                // Log someting to the console (should never happen)
-            }
-            // remove event(s) binding to the resource
-            List<CustomerAccountEvent> events = eventFacade.findAll();
-            for (CustomerAccountEvent event : events) {
-                if (event.getResource().getId().equals(id)) {
-                    eventFacade.remove(event.getId());
-                }
-            }
-            //remove resource
-            customerFacade.remove(id);
-
-            // 200 
-            Response response = Response.ok(entity).build();
-            return response;
-        } catch (UnknownResourceException ex) {
-            Response response = Response.status(Response.Status.NOT_FOUND).build();
-            return response;
+            //Pause for 4 seconds to finish notification
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {
+            // Log someting to the console (should never happen)
         }
+        // remove event(s) binding to the resource
+        List<CustomerAccountEvent> events = eventFacade.findAll();
+        for (CustomerAccountEvent event : events) {
+            if (event.getResource().getId().equals(id)) {
+                eventFacade.remove(event.getId());
+            }
+        }
+        //remove resource
+        customerFacade.remove(id);
+        // 204 
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PATCH
@@ -213,13 +205,13 @@ public class CustomerAccountResource {
     @Produces({"application/json"})
     public Response patch(@PathParam("id") long id, CustomerAccount partialCustomerAccount) throws BadUsageException, UnknownResourceException {
         Response response = null;
-        
+
         customerFacade.checkCreationOrUpdate(partialCustomerAccount);
 
         CustomerAccount currentCustomerAccount = customerFacade.updateAttributs(id, partialCustomerAccount);
 
-        // 201 OK + location
-        response = Response.status(Response.Status.CREATED).entity(currentCustomerAccount).build();
+        // 200 OK + location
+        response = Response.status(Response.Status.OK).entity(currentCustomerAccount).build();
 
         return response;
     }

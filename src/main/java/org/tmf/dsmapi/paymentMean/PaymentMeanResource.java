@@ -165,7 +165,6 @@ public class PaymentMeanResource {
 //        }
 //        return response;
 //    }
-
     /**
      *
      * For test purpose only
@@ -176,35 +175,29 @@ public class PaymentMeanResource {
      */
     @DELETE
     @Path("{id}")
-    public Response delete(@PathParam("id") long id) {
+    public Response delete(@PathParam("id") long id) throws UnknownResourceException {
+        PaymentMean entity = customerFacade.find(id);
+
+        // Event deletion
+        publisher.deleteNotification(entity, new Date());
         try {
-            PaymentMean entity = customerFacade.find(id);
-
-            // Event deletion
-            publisher.deleteNotification(entity, new Date());
-            try {
-                //Pause for 4 seconds to finish notification
-                Thread.sleep(4000);
-            } catch (InterruptedException ex) {
-                // Log someting to the console (should never happen)
-            }
-            // remove event(s) binding to the resource
-            List<PaymentMeanEvent> events = eventFacade.findAll();
-            for (PaymentMeanEvent event : events) {
-                if (event.getResource().getId().equals(id)) {
-                    eventFacade.remove(event.getId());
-                }
-            }
-            //remove resource
-            customerFacade.remove(id);
-
-            // 200 
-            Response response = Response.ok(entity).build();
-            return response;
-        } catch (UnknownResourceException ex) {
-            Response response = Response.status(Response.Status.NOT_FOUND).build();
-            return response;
+            //Pause for 4 seconds to finish notification
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {
+            // Log someting to the console (should never happen)
         }
+        // remove event(s) binding to the resource
+        List<PaymentMeanEvent> events = eventFacade.findAll();
+        for (PaymentMeanEvent event : events) {
+            if (event.getResource().getId().equals(id)) {
+                eventFacade.remove(event.getId());
+            }
+        }
+        //remove resource
+        customerFacade.remove(id);
+
+        // 204 
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PATCH
@@ -216,9 +209,9 @@ public class PaymentMeanResource {
         customerFacade.checkUpdate(partialPayment);
 
         PaymentMean currentPayment = customerFacade.updateAttributs(id, partialPayment);
-        
-        // 201 OK + location
-        response = Response.status(Response.Status.CREATED).entity(currentPayment).build();
+
+        // 200 OK + location
+        response = Response.status(Response.Status.OK).entity(currentPayment).build();
 
         return response;
     }

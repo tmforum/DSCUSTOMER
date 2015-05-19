@@ -161,8 +161,8 @@ public class CustomerResource {
             entity.setId(id);
             customerFacade.edit(entity);
             publisher.updateNotification(entity, new Date());
-            // 201 OK + location
-            response = Response.status(Response.Status.CREATED).entity(entity).build();
+            // 200 OK + location
+            response = Response.status(Response.Status.OK).entity(entity).build();
 
         } else {
             // 404 not found
@@ -181,8 +181,7 @@ public class CustomerResource {
      */
     @DELETE
     @Path("{id}")
-    public Response delete(@PathParam("id") long id) {
-        try {
+    public Response delete(@PathParam("id") long id) throws UnknownResourceException {
             Customer entity = customerFacade.find(id);
 
             // Event deletion
@@ -202,14 +201,8 @@ public class CustomerResource {
             }
             //remove resource
             customerFacade.remove(id);
-
-            // 200 
-            Response response = Response.ok(entity).build();
-            return response;
-        } catch (UnknownResourceException ex) {
-            Response response = Response.status(Response.Status.NOT_FOUND).build();
-            return response;
-        }
+            // 204 
+            return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PATCH
@@ -221,8 +214,8 @@ public class CustomerResource {
         
         Customer currentCustomer = customerFacade.updateAttributs(id, partialCustomer);
         
-        // 201 OK + location
-        response = Response.status(Response.Status.CREATED).entity(currentCustomer).build();
+        // 200 OK + location
+        response = Response.status(Response.Status.OK).entity(currentCustomer).build();
 
         return response;
     }

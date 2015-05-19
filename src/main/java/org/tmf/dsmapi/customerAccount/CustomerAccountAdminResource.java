@@ -16,7 +16,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import org.tmf.dsmapi.commons.exceptions.BadUsageException;
 import org.tmf.dsmapi.commons.exceptions.UnknownResourceException;
 import org.tmf.dsmapi.commons.jaxrs.Report;
@@ -44,8 +46,8 @@ public class CustomerAccountAdminResource {
     CustomerAccountFacade customerFacade;
     @EJB
     CustomerAccountEventFacade eventFacade;
-    @EJB
-    CustomerAccountEventPublisherLocal publisher;
+//    @EJB
+//    CustomerAccountEventPublisherLocal publisher;
 
     @GET
     @Produces({"application/json"})
@@ -63,21 +65,25 @@ public class CustomerAccountAdminResource {
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
-    public Response post(List<CustomerAccount> entities) {
+    public Response post(List<CustomerAccount> entities, @Context UriInfo info) throws UnknownResourceException {
 
         if (entities == null) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
         }
 
         int previousRows = customerFacade.count();
-        int affectedRows;
+        int affectedRows=0;
 
         // Try to persist entities
         try {
-            affectedRows = customerFacade.create(entities);
             for (CustomerAccount entitie : entities) {
-                publisher.createNotification(entitie, new Date());
+                customerFacade.create(entitie);
+                entitie.setHref(info.getAbsolutePath() + "/" + Long.toString(entitie.getId()));
+                customerFacade.edit(entitie);
+                affectedRows = affectedRows + 1;
+//                publisher.createNotification(entitie, new Date());
             }
+//            affectedRows = customerFacade.create(entities);
         } catch (BadUsageException e) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
         }
@@ -102,9 +108,9 @@ public class CustomerAccountAdminResource {
         if (customer != null) {
             entity.setId(id);
             customerFacade.edit(entity);
-            publisher.updateNotification(entity, new Date());
-            // 201 OK + location
-            response = Response.status(Response.Status.CREATED).entity(entity).build();
+//            publisher.updateNotification(entity, new Date());
+            // 200 OK + location
+            response = Response.status(Response.Status.OK).entity(entity).build();
 
         } else {
             // 404 not found
@@ -152,41 +158,35 @@ public class CustomerAccountAdminResource {
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") Long id) throws UnknownResourceException {
+        int previousRows = customerFacade.count();
+        CustomerAccount entity = customerFacade.find(id);
+
+        // Event deletion
+//        publisher.deleteNotification(entity, new Date());
         try {
-            int previousRows = customerFacade.count();
-            CustomerAccount entity = customerFacade.find(id);
-
-            // Event deletion
-            publisher.deleteNotification(entity, new Date());
-            try {
-                //Pause for 4 seconds to finish notification
-                Thread.sleep(4000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CustomerAccountAdminResource.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            // remove event(s) binding to the resource
-            List<CustomerAccountEvent> events = eventFacade.findAll();
-            for (CustomerAccountEvent event : events) {
-                if (event.getResource().getId().equals(id)) {
-                    eventFacade.remove(event.getId());
-                }
-            }
-            //remove resource
-            customerFacade.remove(id);
-
-            int affectedRows = 1;
-            Report stat = new Report(customerFacade.count());
-            stat.setAffectedRows(affectedRows);
-            stat.setPreviousRows(previousRows);
-
-            // 200 
-            Response response = Response.ok(stat).build();
-            return response;
-        } catch (UnknownResourceException ex) {
+            //Pause for 4 seconds to finish notification
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {
             Logger.getLogger(CustomerAccountAdminResource.class.getName()).log(Level.SEVERE, null, ex);
-            Response response = Response.status(Response.Status.NOT_FOUND).build();
-            return response;
         }
+        // remove event(s) binding to the resource
+        List<CustomerAccountEvent> events = eventFacade.findAll();
+        for (CustomerAccountEvent event : events) {
+            if (event.getResource().getId().equals(id)) {
+                eventFacade.remove(event.getId());
+            }
+        }
+        //remove resource
+        customerFacade.remove(id);
+
+        int affectedRows = 1;
+        Report stat = new Report(customerFacade.count());
+        stat.setAffectedRows(affectedRows);
+        stat.setPreviousRows(previousRows);
+
+        // 200 
+        Response response = Response.ok(stat).build();
+        return response;
     }
 
     @GET
@@ -293,7 +293,6 @@ public class CustomerAccountAdminResource {
 
         customerAccount.setCustomerAccountTaxExemption(customerAccountTaxExemptions);
 
-
         List<CustomerAccountRelationship> customerAccountRelationships = new ArrayList<CustomerAccountRelationship>();
         CustomerAccountRelationship caRelationship = new CustomerAccountRelationship();
         caRelationship.setRelationshipType("Type xx");
@@ -386,7 +385,7 @@ public class CustomerAccountAdminResource {
         validFor.setStartDateTime(gc.getTime());
         validFor.setEndDateTime(null);
         customerAccountBalances.add(caBalance);
-        
+
         caBalance = new CustomerAccountBalance();
         caBalance.setType("DepositBalance");
         caBalance.setAmount(new Float("52.3"));
@@ -395,7 +394,7 @@ public class CustomerAccountAdminResource {
         validFor.setStartDateTime(gc.getTime());
         validFor.setEndDateTime(null);
         customerAccountBalances.add(caBalance);
-        
+
         customerAccount.setCustomerAccountBalance(customerAccountBalances);
 
         List<PaymentPlan> paymentPlans = new ArrayList<PaymentPlan>();
@@ -412,7 +411,7 @@ public class CustomerAccountAdminResource {
         validFor.setEndDateTime(gc.getTime());
         paymentPlan.setValidFor(validFor);
         paymentPlans.add(paymentPlan);
-        
+
         paymentPlan = new PaymentPlan();
         paymentPlan.setStatus("Ineffective");
         paymentPlan.setType("Type2");
@@ -430,9 +429,8 @@ public class CustomerAccountAdminResource {
         paymentMean.setHref("http://serverlocation:port/customerManagement/paymentMean/70");
         paymentPlan.setPaymentMean(paymentMean);
         paymentPlans.add(paymentPlan);
-        
-        customerAccount.setPaymentPlan(paymentPlans);
 
+        customerAccount.setPaymentPlan(paymentPlans);
 
         return customerAccount;
     }

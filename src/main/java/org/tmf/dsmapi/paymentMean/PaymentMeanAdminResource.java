@@ -15,7 +15,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import org.tmf.dsmapi.commons.exceptions.BadUsageException;
 import org.tmf.dsmapi.commons.exceptions.UnknownResourceException;
 import org.tmf.dsmapi.commons.jaxrs.Report;
@@ -36,8 +38,8 @@ public class PaymentMeanAdminResource {
     PaymentMeanFacade customerFacade;
     @EJB
     PaymentMeanEventFacade eventFacade;
-    @EJB
-    PaymentMeanEventPublisherLocal publisher;
+//    @EJB
+//    PaymentMeanEventPublisherLocal publisher;
 
     @GET
     @Produces({"application/json"})
@@ -48,27 +50,32 @@ public class PaymentMeanAdminResource {
     /**
      *
      * For test purpose only
+     *
      * @param entities
      * @return
      */
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
-    public Response post(List<PaymentMean> entities) {
+    public Response post(List<PaymentMean> entities, @Context UriInfo info) throws UnknownResourceException {
 
         if (entities == null) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
         }
 
         int previousRows = customerFacade.count();
-        int affectedRows;
+        int affectedRows=0;
 
         // Try to persist entities
         try {
-            affectedRows = customerFacade.create(entities);
             for (PaymentMean entitie : entities) {
-                publisher.createNotification(entitie, new Date());
+                customerFacade.create(entitie);
+                entitie.setHref(info.getAbsolutePath() + "/" + Long.toString(entitie.getId()));
+                customerFacade.edit(entitie);
+                affectedRows = affectedRows + 1;
+//                publisher.createNotification(entitie, new Date());
             }
+//            affectedRows = customerFacade.create(entities);
         } catch (BadUsageException e) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
         }
@@ -93,9 +100,9 @@ public class PaymentMeanAdminResource {
         if (customer != null) {
             entity.setId(id);
             customerFacade.edit(entity);
-            publisher.updateNotification(entity, new Date());
-            // 201 OK + location
-            response = Response.status(Response.Status.CREATED).entity(entity).build();
+//            publisher.updateNotification(entity, new Date());
+            // 200 OK + location
+            response = Response.status(Response.Status.OK).entity(entity).build();
 
         } else {
             // 404 not found
@@ -107,6 +114,7 @@ public class PaymentMeanAdminResource {
     /**
      *
      * For test purpose only
+     *
      * @return
      * @throws org.tmf.dsmapi.commons.exceptions.UnknownResourceException
      */
@@ -134,6 +142,7 @@ public class PaymentMeanAdminResource {
     /**
      *
      * For test purpose only
+     *
      * @param id
      * @return
      * @throws UnknownResourceException
@@ -141,41 +150,35 @@ public class PaymentMeanAdminResource {
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") Long id) throws UnknownResourceException {
+        int previousRows = customerFacade.count();
+        PaymentMean entity = customerFacade.find(id);
+
+        // Event deletion
+//        publisher.deleteNotification(entity, new Date());
         try {
-            int previousRows = customerFacade.count();
-            PaymentMean entity = customerFacade.find(id);
-
-            // Event deletion
-            publisher.deleteNotification(entity, new Date());
-            try {
-                //Pause for 4 seconds to finish notification
-                Thread.sleep(4000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PaymentMeanAdminResource.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            // remove event(s) binding to the resource
-            List<PaymentMeanEvent> events = eventFacade.findAll();
-            for (PaymentMeanEvent event : events) {
-                if (event.getResource().getId().equals(id)) {
-                    eventFacade.remove(event.getId());
-                }
-            }
-            //remove resource
-            customerFacade.remove(id);
-
-            int affectedRows = 1;
-            Report stat = new Report(customerFacade.count());
-            stat.setAffectedRows(affectedRows);
-            stat.setPreviousRows(previousRows);
-
-            // 200 
-            Response response = Response.ok(stat).build();
-            return response;
-        } catch (UnknownResourceException ex) {
+            //Pause for 4 seconds to finish notification
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {
             Logger.getLogger(PaymentMeanAdminResource.class.getName()).log(Level.SEVERE, null, ex);
-            Response response = Response.status(Response.Status.NOT_FOUND).build();
-            return response;
         }
+        // remove event(s) binding to the resource
+        List<PaymentMeanEvent> events = eventFacade.findAll();
+        for (PaymentMeanEvent event : events) {
+            if (event.getResource().getId().equals(id)) {
+                eventFacade.remove(event.getId());
+            }
+        }
+        //remove resource
+        customerFacade.remove(id);
+
+        int affectedRows = 1;
+        Report stat = new Report(customerFacade.count());
+        stat.setAffectedRows(affectedRows);
+        stat.setPreviousRows(previousRows);
+
+        // 200 
+        Response response = Response.ok(stat).build();
+        return response;
     }
 
     @GET
@@ -252,21 +255,21 @@ public class PaymentMeanAdminResource {
         validFor.setEndDateTime(gc.getTime());
         paymentMean.setValidFor(validFor);
         paymentMean.setType("BankAccountDebit");
-        
+
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBIC("PSSTFRPPPAR");
         bankAccount.setDomiciliation("LaBanquePostale–75900ParixCedex15");
         bankAccount.setIBAN("FR4620061009010835927F33098");
         bankAccount.setAccountHolder("Mr.GustaveFlaubert");
         paymentMean.setBankAccount(bankAccount);
-        
+
         RelatedParty relatedParty = new RelatedParty();
         relatedParty.setId("1");
         relatedParty.setHref("http://serverlocation:port/partyManagement/individual/1");
         relatedParty.setRole("customer");
         relatedParty.setName("Gustave Flaubert");
         paymentMean.setRelatedParty(relatedParty);
-        
+
         CreditCard creditcard = new CreditCard();
         creditcard.setType("MasterCard");
         gc.set(2020, 01, 01);
@@ -274,7 +277,7 @@ public class PaymentMeanAdminResource {
         creditcard.setNumber("CreditCardNumber");
         creditcard.setHolder("Gustave Flaubert");
         paymentMean.setCreditCard(creditcard);
-        
+
         return paymentMean;
     }
 
