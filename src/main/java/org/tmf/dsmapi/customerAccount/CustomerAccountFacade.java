@@ -42,25 +42,25 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
         return em;
     }
 
-    @Override
-    public void create(CustomerAccount entity) throws BadUsageException {
-        if (entity.getId() != null) {
-            throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC, 
-                    "While creating CustomerAccount, id must be null");
+    public void checkCreationOrUpdate(CustomerAccount customerAccount) throws BadUsageException, UnknownResourceException {
+
+        if (customerAccount.getId() != null) {
+            if (this.find(customerAccount.getId()) != null) {
+                throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC, 
+                        "Duplicate Exception, CustomerAccount with same id :"+customerAccount.getId()+" alreay exists");
+            }
         }
-        entity.setLastModified(new Date());
 
-        super.create(entity);
-    }
+        customerAccount.setLastModified(new Date());
 
-    public void checkCreationOrUpdate(CustomerAccount customerAccount) throws BadUsageException {
-
-        if (null == customerAccount.getName()) {
+        if (null == customerAccount.getName()
+                || customerAccount.getName().isEmpty()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
                     "name is mandatory");
         }
 
-        if (null == customerAccount.getAccountType()) {
+        if (null == customerAccount.getAccountType()
+                || customerAccount.getAccountType().isEmpty()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
                     "accountType is mandatory");
         }
@@ -69,13 +69,19 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
                 && !customerAccount.getCustomerAccountTaxExemption().isEmpty()) {
             List<CustomerAccountTaxExemption> l_customerAccountTaxExemption = customerAccount.getCustomerAccountTaxExemption();
             for (CustomerAccountTaxExemption customerAccountTaxExemption : l_customerAccountTaxExemption) {
-                if (null == customerAccountTaxExemption.getIssuingJurisdiction()) {
+                if (null == customerAccountTaxExemption.getIssuingJurisdiction()
+                        || customerAccountTaxExemption.getIssuingJurisdiction().isEmpty()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
                             "customerAccountTaxExemption.issuingJurisdiction is mandatory");
                 }
                 if (null == customerAccountTaxExemption.getValidFor()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
                             "customerAccountTaxExemption.validFor is mandatory");
+                } else {
+                    if (customerAccountTaxExemption.getValidFor().getStartDateTime() == null) {
+                        throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC,
+                                "customerAccountTaxExemption.validFor.startDateTime is mandatory");
+                    }
                 }
             }
         }
@@ -91,6 +97,11 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
                 if (null == customerAccountRelationship.getValidFor()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS,
                             "customerAccountRelationship.validFor is mandatory");
+                } else {
+                    if (customerAccountRelationship.getValidFor().getStartDateTime() == null) {
+                        throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC,
+                                "customerAccountRelationship.validFor.startDateTime is mandatory");
+                    }
                 }
             }
         }
@@ -106,6 +117,11 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
                 if (null == contact.getValidFor()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
                             "contact.validFor is mandatory");
+                } else {
+                    if (contact.getValidFor().getStartDateTime() == null) {
+                        throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC,
+                                "contact.validFor.startDateTime is mandatory");
+                    }
                 }
             }
         }
@@ -136,6 +152,11 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
                 if (null == customerAccountBalance.getValidFor()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
                             "customerAccountBalance.validFor is mandatory");
+                } else {
+                    if (customerAccountBalance.getValidFor().getStartDateTime() == null) {
+                        throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC,
+                                "customerAccountBalance.validFor.startDateTime is mandatory");
+                    }
                 }
                 if (null == customerAccountBalance.getStatus()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
@@ -163,13 +184,18 @@ public class CustomerAccountFacade extends AbstractFacade<CustomerAccount> {
                 if (null == paymentPlan.getValidFor()) {
                     throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, 
                             "paymentPlan.validFor is mandatory");
+                } else {
+                    if (paymentPlan.getValidFor().getStartDateTime() == null) {
+                        throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC,
+                                "paymentPlan.validFor.startDateTime is mandatory");
+                    }
                 }
             }
         }
 
     }
 
-    public CustomerAccount updateAttributs(long id, CustomerAccount partialCustomerAccount) throws UnknownResourceException, BadUsageException {
+    public CustomerAccount patchAttributs(long id, CustomerAccount partialCustomerAccount) throws UnknownResourceException, BadUsageException {
         CustomerAccount currentCustomerAccount = this.find(id);
 
         if (currentCustomerAccount == null) {

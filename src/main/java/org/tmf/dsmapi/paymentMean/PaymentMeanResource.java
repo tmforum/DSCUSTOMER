@@ -35,7 +35,7 @@ import org.tmf.dsmapi.paymentMean.event.PaymentMeanEvent;
 import org.tmf.dsmapi.paymentMean.event.PaymentMeanEventFacade;
 
 @Stateless
-@Path("paymentMean")
+@Path("/customerManagement/v2/paymentMean")
 public class PaymentMeanResource {
 
     @EJB
@@ -206,9 +206,8 @@ public class PaymentMeanResource {
     @Produces({"application/json"})
     public Response patch(@PathParam("id") long id, PaymentMean partialPayment) throws BadUsageException, UnknownResourceException {
         Response response = null;
-        customerFacade.checkUpdate(partialPayment);
 
-        PaymentMean currentPayment = customerFacade.updateAttributs(id, partialPayment);
+        PaymentMean currentPayment = customerFacade.patchAttributs(id, partialPayment);
 
         // 200 OK + location
         response = Response.status(Response.Status.OK).entity(currentPayment).build();

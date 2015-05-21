@@ -212,7 +212,7 @@ public class CustomerResource {
     public Response patch(@PathParam("id") long id, Customer partialCustomer) throws BadUsageException, UnknownResourceException {
         Response response = null;
         
-        Customer currentCustomer = customerFacade.updateAttributs(id, partialCustomer);
+        Customer currentCustomer = customerFacade.patchAttributs(id, partialCustomer);
         
         // 200 OK + location
         response = Response.status(Response.Status.OK).entity(currentCustomer).build();

@@ -208,7 +208,7 @@ public class CustomerAccountResource {
 
         customerFacade.checkCreationOrUpdate(partialCustomerAccount);
 
-        CustomerAccount currentCustomerAccount = customerFacade.updateAttributs(id, partialCustomerAccount);
+        CustomerAccount currentCustomerAccount = customerFacade.patchAttributs(id, partialCustomerAccount);
 
         // 200 OK + location
         response = Response.status(Response.Status.OK).entity(currentCustomerAccount).build();

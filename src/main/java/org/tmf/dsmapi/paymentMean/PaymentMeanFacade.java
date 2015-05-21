@@ -36,18 +36,17 @@ public class PaymentMeanFacade extends AbstractFacade<PaymentMean> {
         return em;
     }
 
-    @Override
-    public void create(PaymentMean entity) throws BadUsageException {
-        if (entity.getId() != null) {
-            throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC, "While creating PaymentMean, id must be null");
+    public void checkCreation(PaymentMean paymentMean) throws BadUsageException, UnknownResourceException {
+
+        if (paymentMean.getId() != null) {
+            if (this.find(paymentMean.getId()) != null) {
+                throw new BadUsageException(ExceptionType.BAD_USAGE_GENERIC, 
+                        "Duplicate Exception, PaymentMean with same id :"+paymentMean.getId()+" alreay exists");
+            }
         }
 
-        super.create(entity);
-    }
-
-    public void checkCreation(PaymentMean paymentMean) throws BadUsageException {
-
-        if (null == paymentMean.getName()) {
+        if (null == paymentMean.getName()
+                || paymentMean.getName().isEmpty()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "name is mandatory");
         }
 
@@ -55,7 +54,8 @@ public class PaymentMeanFacade extends AbstractFacade<PaymentMean> {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "relatedParty is mandatory");
         }
 
-        if (null == paymentMean.getType()) {
+        if (null == paymentMean.getType()
+                || paymentMean.getType().isEmpty()) {
             throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "type is mandatory");
         } else {
             if (!paymentMean.getType().equalsIgnoreCase("CreditCard")) {
@@ -71,11 +71,19 @@ public class PaymentMeanFacade extends AbstractFacade<PaymentMean> {
 
     }
 
-    public PaymentMean updateAttributs(long id, PaymentMean partialPaymentMean) throws UnknownResourceException, BadUsageException {
+    public PaymentMean patchAttributs(long id, PaymentMean partialPaymentMean) throws UnknownResourceException, BadUsageException {
         PaymentMean currentPaymentMean = this.find(id);
 
         if (currentPaymentMean == null) {
             throw new UnknownResourceException(ExceptionType.UNKNOWN_RESOURCE);
+        }
+
+        if (null != partialPaymentMean.getId()) {
+            throw new BadUsageException(ExceptionType.BAD_USAGE_OPERATOR, "'id' is not patchable");
+        }
+
+        if (null != partialPaymentMean.getHref()) {
+            throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "'href is not patchable");
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -90,22 +98,4 @@ public class PaymentMeanFacade extends AbstractFacade<PaymentMean> {
         return currentPaymentMean;
     }
 
-    public void checkUpdate(PaymentMean paymentMean) throws BadUsageException {
-
-        if (null != paymentMean.getId()) {
-            throw new BadUsageException(ExceptionType.BAD_USAGE_OPERATOR, "'id' is not modifiable");
-        }
-
-        if (null != paymentMean.getHref()) {
-            throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "'href is not modifiable");
-        }
-
-        if (null != paymentMean.getName()) {
-            throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "name is mandatory");
-        }
-
-        if (null != paymentMean.getValidFor()) {
-            throw new BadUsageException(ExceptionType.BAD_USAGE_MANDATORY_FIELDS, "validFor is mandatory");
-        }
-    }
 }
