@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
         <hyperjaxb.version>0.6.0</hyperjaxb.version>
-        <jersey.version>2.15</jersey.version>
+        <jersey.version>2.46</jersey.version>
         <jackson.version>1.9.13</jackson.version>
         <eclipselink.version>2.5.2</eclipselink.version>
         <jerseymedia.version>2.7</jerseymedia.version>
